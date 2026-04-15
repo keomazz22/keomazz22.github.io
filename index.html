@@ -1,0 +1,1025 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Keomazz — IFX Cartel</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Familjen+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--g:#B8963E;--g2:#E2C16A;--gdim:rgba(184,150,62,0.12);--r:#D63031;--gr:#27AE60;--bg:#050505;--s1:#0C0C0C;--s2:#111111;--s3:#171717;--bd:#1F1F1F;--bd2:#2A2A2A;--t:#EFEFEF;--t2:#999;--t3:#555;}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--t);font-family:'Familjen Grotesk',sans-serif;overflow-x:hidden;cursor:none;}
+#cur{position:fixed;width:8px;height:8px;background:var(--g);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .15s,height .15s;}
+#cur2{position:fixed;width:32px;height:32px;border:1px solid rgba(184,150,62,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:left .1s ease,top .1s ease,width .2s,height .2s;}
+body *{cursor:none;}
+body::after{content:'';position:fixed;inset:0;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.035'/%3E%3C/svg%3E");pointer-events:none;z-index:0;}
+nav{position:fixed;top:0;left:0;right:0;z-index:500;padding:18px 56px;display:flex;justify-content:space-between;align-items:center;background:linear-gradient(rgba(5,5,5,.97),transparent);backdrop-filter:blur(4px);}
+.nlogo{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:4px;color:var(--t);}
+.nlogo b{color:var(--g);}
+.nlinks{display:flex;gap:40px;list-style:none;}
+.nlinks a{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2.5px;text-transform:uppercase;color:var(--t3);text-decoration:none;transition:color .2s;}
+.nlinks a:hover{color:var(--g);}
+.ncta{background:var(--g);color:#000;font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;padding:11px 28px;text-decoration:none;transition:background .2s,transform .2s;display:inline-block;}
+.ncta:hover{background:var(--g2);transform:translateY(-1px);}
+.hero{min-height:100vh;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:0 56px 90px;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 800px 600px at 65% 40%,rgba(184,150,62,.07) 0%,transparent 70%),radial-gradient(ellipse 400px 400px at 10% 90%,rgba(214,48,49,.05) 0%,transparent 60%);}
+.hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:72px 72px;-webkit-mask-image:radial-gradient(ellipse at 50% 100%,black 20%,transparent 65%);mask-image:radial-gradient(ellipse at 50% 100%,black 20%,transparent 65%);}
+.ticker-wrap{position:absolute;top:0;left:0;right:0;height:36px;background:var(--g);overflow:hidden;display:flex;align-items:center;}
+.ticker-inner{display:flex;gap:56px;animation:tick 22s linear infinite;width:max-content;}
+.tick-item{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:500;color:#000;letter-spacing:1.5px;white-space:nowrap;display:flex;gap:10px;align-items:center;}
+.tick-up{color:#0a4d1f;}.tick-dn{color:#6b0a0a;}
+@keyframes tick{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.h-badge{display:inline-flex;align-items:center;gap:10px;border:1px solid var(--bd2);padding:8px 16px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;margin-bottom:28px;position:relative;z-index:2;opacity:0;animation:fu .7s .2s forwards;}
+.h-badge span{color:var(--g);}
+.h-dot{width:6px;height:6px;border-radius:50%;background:var(--gr);animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(39,174,96,.4)}50%{box-shadow:0 0 0 6px rgba(39,174,96,0)}}
+.h-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(90px,14vw,200px);line-height:.82;letter-spacing:-1px;position:relative;z-index:2;opacity:0;animation:fu .8s .35s forwards;}
+.h-name .stroke{-webkit-text-stroke:1.5px var(--g);color:transparent;}
+.h-name .solid{color:var(--t);}
+.h-name .gold{color:var(--g);font-style:italic;}
+.h-desc{font-size:16px;color:var(--t2);line-height:1.85;max-width:500px;font-weight:400;margin-top:28px;position:relative;z-index:2;border-left:2px solid var(--g);padding-left:20px;opacity:0;animation:fu .8s .55s forwards;}
+.h-desc strong{color:var(--t);}
+.h-btns{display:flex;gap:14px;margin-top:36px;flex-wrap:wrap;position:relative;z-index:2;opacity:0;animation:fu .8s .7s forwards;}
+.btn-g{background:var(--g);color:#000;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;padding:16px 40px;text-decoration:none;display:inline-block;clip-path:polygon(0 0,calc(100% - 10px) 0,100% 10px,100% 100%,10px 100%,0 calc(100% - 10px));transition:background .2s,transform .2s;}
+.btn-g:hover{background:var(--g2);transform:translateY(-2px);}
+.btn-o{background:transparent;color:var(--t);font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;padding:15px 40px;text-decoration:none;display:inline-block;border:1px solid var(--bd2);transition:border-color .2s,color .2s;}
+.btn-o:hover{border-color:var(--g);color:var(--g);}
+.h-stats{position:absolute;right:56px;bottom:90px;z-index:2;display:flex;flex-direction:column;gap:28px;text-align:right;opacity:0;animation:fl .8s .9s forwards;}
+.hs-n{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--g);line-height:1;}
+.hs-l{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--t3);text-transform:uppercase;margin-top:2px;}
+.h-scroll{position:absolute;bottom:28px;left:50%;transform:translateX(-50%);z-index:2;display:flex;flex-direction:column;align-items:center;gap:8px;}
+.h-scroll-line{width:1px;height:44px;background:linear-gradient(var(--g),transparent);animation:sp 2s ease-in-out infinite;}
+.h-scroll-txt{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--t3);text-transform:uppercase;}
+@keyframes sp{0%,100%{opacity:.3}50%{opacity:1}}
+@keyframes fu{from{opacity:0;transform:translateY(36px)}to{opacity:1;transform:none}}
+@keyframes fl{from{opacity:0;transform:translateX(36px)}to{opacity:1;transform:none}}
+.about-strip{background:var(--s1);padding:88px 56px;position:relative;z-index:1;}
+.about-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:80px;align-items:center;}
+.a-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3.5px;color:var(--g);text-transform:uppercase;margin-bottom:18px;display:flex;align-items:center;gap:10px;}
+.a-tag::after{content:'';flex:1;height:1px;background:var(--bd);}
+.a-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,5vw,68px);line-height:.9;margin-bottom:24px;}
+.a-title em{color:var(--g);font-style:italic;}
+.a-text{font-size:15px;color:var(--t2);line-height:1.9;font-weight:400;}
+.a-text strong{color:var(--t);}
+.a-cards{display:flex;flex-direction:column;gap:2px;}
+.a-card{background:var(--s2);border:1px solid var(--bd);padding:24px 28px;position:relative;transition:border-color .3s,transform .3s;overflow:hidden;}
+.a-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--g);}
+.a-card:hover{border-color:rgba(184,150,62,.4);transform:translateX(6px);}
+.a-card-n{font-family:'Bebas Neue',sans-serif;font-size:46px;color:var(--g);line-height:1;}
+.a-card-t{font-size:13px;color:var(--t3);margin-top:3px;}
+.mq{overflow:hidden;background:var(--g);padding:14px 0;}
+.mq-t{display:flex;gap:52px;animation:mq 18s linear infinite;width:max-content;}
+.mq-i{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#000;white-space:nowrap;display:flex;align-items:center;gap:20px;}
+.mq-i::after{content:'✦';font-size:11px;}
+@keyframes mq{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.mq2{background:var(--s1);border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);}
+.mq2 .mq-t{animation-direction:reverse;animation-duration:24s;}
+.mq2 .mq-i{color:var(--g);font-size:17px;}
+.services{padding:120px 56px;background:var(--bg);position:relative;z-index:1;}
+.services-wrap{max-width:1120px;margin:0 auto;}
+.sec-hd{margin-bottom:72px;}
+.sec-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:3.5px;color:var(--g);text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:10px;}
+.sec-tag::after{content:'';width:50px;height:1px;background:var(--g);}
+.sec-h{font-family:'Bebas Neue',sans-serif;font-size:clamp(52px,7vw,88px);line-height:.88;}
+.sec-h em{color:var(--g);font-style:italic;}
+.svc-grid{display:flex;flex-direction:column;gap:3px;}
+.svc{background:var(--s1);border:1px solid var(--bd);overflow:hidden;position:relative;transition:border-color .3s;}
+.svc:hover{border-color:rgba(184,150,62,.35);}
+.svc.hot{border-color:rgba(184,150,62,.25);background:linear-gradient(135deg,#0C0C0C,#0F0F08);}
+.svc-layout{display:grid;grid-template-columns:100px 1fr 220px;}
+.svc-idx{background:var(--s2);border-right:1px solid var(--bd);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--bd2);transition:color .3s,background .3s;}
+.svc:hover .svc-idx{color:rgba(184,150,62,.25);background:var(--gdim);}
+.svc.hot .svc-idx{color:rgba(184,150,62,.3);}
+.svc-body{padding:36px 44px;}
+.svc-kicker{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--g);text-transform:uppercase;margin-bottom:10px;}
+.svc-name{font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,3.5vw,50px);line-height:.95;margin-bottom:16px;letter-spacing:.5px;}
+.svc-desc{font-size:14px;color:#888;line-height:1.85;max-width:600px;margin-bottom:20px;}
+.svc-desc strong{color:var(--t);}
+.svc-pills{display:flex;flex-wrap:wrap;gap:7px;}
+.pill{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;padding:5px 12px;border:1px solid var(--bd);color:var(--t3);transition:all .2s;}
+.svc:hover .pill{border-color:rgba(184,150,62,.25);color:#888;}
+.svc-price-box{border-left:1px solid var(--bd);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:32px 28px;gap:4px;}
+.svc-was{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t3);text-decoration:line-through;letter-spacing:1px;}
+.svc-price{font-family:'Bebas Neue',sans-serif;font-size:52px;color:var(--g);line-height:1;}
+.svc-period{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:2px;text-transform:uppercase;margin-bottom:16px;}
+.svc-btn{background:transparent;border:1px solid var(--bd2);color:var(--t2);font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2.5px;text-transform:uppercase;padding:12px 24px;text-decoration:none;display:block;text-align:center;width:100%;transition:all .2s;}
+.svc:hover .svc-btn,.svc.hot .svc-btn{background:var(--g);border-color:var(--g);color:#000;}
+.svc-save{background:var(--r);color:#fff;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;padding:3px 10px;margin-bottom:6px;}
+.hot-badge{position:absolute;top:14px;right:14px;background:var(--g);color:#000;font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;padding:4px 14px;}
+.svc-alt-price{display:flex;flex-direction:column;gap:10px;width:100%;}
+.alt-row{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--bd);}
+.alt-row:last-child{border-bottom:none;}
+.alt-label{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--t3);text-transform:uppercase;}
+.alt-val{font-family:'Bebas Neue',sans-serif;font-size:26px;color:var(--g);line-height:1;}
+.exp-section{background:var(--s1);padding:0 56px;}
+.exp-inner{max-width:1120px;margin:0 auto;}
+.exp-timeline{position:relative;padding:72px 0;display:flex;flex-direction:column;}
+.exp-timeline::before{content:'';position:absolute;left:22px;top:0;bottom:0;width:1px;background:linear-gradient(to bottom,transparent,var(--bd),var(--bd),transparent);}
+.exp-item{display:flex;gap:48px;padding:32px 0;}
+.exp-dot{width:44px;height:44px;background:var(--gdim);border:1px solid rgba(184,150,62,.4);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:18px;color:var(--g);flex-shrink:0;position:relative;z-index:1;}
+.exp-phase{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:3px;color:var(--g);text-transform:uppercase;margin-bottom:8px;}
+.exp-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:.5px;margin-bottom:8px;}
+.exp-text{font-size:14px;color:#888;line-height:1.8;max-width:600px;}
+.exp-text strong{color:var(--t);}
+.ai-sec{background:var(--bg);padding:120px 56px;position:relative;overflow:hidden;}
+.ai-sec::before{content:'AI';position:absolute;right:-20px;top:40%;font-family:'Bebas Neue',sans-serif;font-size:500px;color:rgba(184,150,62,.025);line-height:1;pointer-events:none;}
+.ai-inner{max-width:1120px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:start;}
+.ai-terminal{background:var(--s2);border:1px solid var(--bd);overflow:hidden;}
+.ai-bar{background:var(--s3);border-bottom:1px solid var(--bd);padding:13px 20px;display:flex;align-items:center;gap:8px;}
+.ai-dot-r{width:10px;height:10px;border-radius:50%;background:#D63031;}
+.ai-dot-y{width:10px;height:10px;border-radius:50%;background:#B8963E;}
+.ai-dot-g{width:10px;height:10px;border-radius:50%;background:#27AE60;}
+.ai-bar-t{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--t3);letter-spacing:2px;margin-left:10px;}
+.ai-body{padding:24px;}
+.ai-lbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2.5px;color:var(--g);text-transform:uppercase;margin-bottom:7px;}
+.ai-sel,.ai-inp{width:100%;background:var(--bg);border:1px solid var(--bd);color:var(--t);padding:12px 14px;font-family:'Familjen Grotesk',sans-serif;font-size:14px;outline:none;margin-bottom:14px;transition:border-color .2s;appearance:none;resize:none;}
+.ai-sel:focus,.ai-inp:focus{border-color:var(--g);}
+.ai-run{width:100%;background:var(--g);color:#000;border:none;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;padding:14px;transition:background .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.ai-run:hover{background:var(--g2);}.ai-run:disabled{opacity:.45;}
+.ai-out{display:none;margin-top:16px;border:1px solid var(--bd);background:var(--bg);overflow:hidden;}
+.ai-out.show{display:block;}
+.ai-out-hd{background:var(--s3);border-bottom:1px solid var(--bd);padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--g);letter-spacing:2px;display:flex;align-items:center;gap:8px;}
+.ai-out-hd::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--gr);animation:blink 1.4s infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+.ai-out-bd{padding:18px;font-size:13px;color:#999;line-height:1.85;max-height:260px;overflow-y:auto;}
+.ai-out-bd .bull{color:var(--gr);font-weight:700;}.ai-out-bd .bear{color:var(--r);font-weight:700;}
+.spin{width:14px;height:14px;border:2px solid var(--bd);border-top-color:var(--g);border-radius:50%;animation:rot .7s linear infinite;display:none;}
+@keyframes rot{to{transform:rotate(360deg)}}
+.ai-r-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(38px,4.5vw,56px);line-height:.9;margin-bottom:18px;}
+.ai-r-title em{color:var(--g);font-style:italic;display:block;}
+.ai-r-sub{font-size:15px;color:var(--t2);line-height:1.85;margin-bottom:30px;}
+.ai-feats{display:flex;flex-direction:column;gap:14px;}
+.ai-feat{display:flex;gap:14px;align-items:flex-start;background:var(--s2);border:1px solid var(--bd);padding:16px;transition:border-color .3s;}
+.ai-feat:hover{border-color:rgba(184,150,62,.3);}
+.ai-feat-ico{width:38px;height:38px;background:var(--gdim);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.ai-feat-t{font-weight:600;font-size:13px;margin-bottom:3px;}
+.ai-feat-d{font-size:12px;color:var(--t3);line-height:1.6;}
+.testi{padding:120px 56px;background:var(--s1);}
+.testi-wrap{max-width:1120px;margin:0 auto;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:3px;margin-top:64px;}
+.tc{background:var(--s2);border:1px solid var(--bd);padding:30px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s;}
+.tc:hover{border-color:rgba(184,150,62,.3);transform:translateY(-4px);}
+.tc.wide{grid-column:span 2;background:linear-gradient(135deg,#0F0F0F,#111108);}
+.tc-stars{display:flex;gap:3px;margin-bottom:16px;}
+.tc-star{color:var(--g);font-size:13px;}
+.tc-result{position:absolute;top:20px;right:20px;background:rgba(39,174,96,.1);border:1px solid rgba(39,174,96,.3);color:var(--gr);font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;padding:4px 11px;}
+.tc-q{font-family:'Bebas Neue',sans-serif;font-size:80px;color:var(--g);opacity:.12;line-height:.7;margin-bottom:6px;}
+.tc-txt{font-size:14px;color:#999;line-height:1.85;margin-bottom:22px;font-style:italic;}
+.tc-txt strong{color:var(--t);font-style:normal;}
+.tc-sep{border:none;border-top:1px solid var(--bd);margin-bottom:18px;}
+.tc-auth{display:flex;align-items:center;gap:12px;}
+.tc-av{width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;font-size:20px;color:#000;flex-shrink:0;}
+.tc-nm{font-weight:600;font-size:13px;}
+.tc-hd{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);letter-spacing:1px;margin-top:2px;}
+.ig-cta{padding:100px 56px;background:var(--bg);text-align:center;position:relative;overflow:hidden;}
+.ig-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 50%,rgba(184,150,62,.07) 0%,transparent 60%);}
+.ig-inner{max-width:720px;margin:0 auto;position:relative;z-index:1;}
+.ig-handle{font-family:'Bebas Neue',sans-serif;font-size:clamp(44px,9vw,110px);line-height:.85;color:transparent;-webkit-text-stroke:1px var(--g);margin:20px 0 28px;letter-spacing:-1px;}
+.ig-sub{font-size:15px;color:var(--t2);line-height:1.85;margin-bottom:40px;}
+.ig-link{display:inline-flex;align-items:center;gap:12px;background:var(--g);color:#000;text-decoration:none;font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:3px;padding:18px 52px;clip-path:polygon(0 0,calc(100% - 12px) 0,100% 12px,100% 100%,12px 100%,0 calc(100% - 12px));transition:background .2s,transform .2s;}
+.ig-link:hover{background:var(--g2);transform:scale(1.02);}
+.final-cta{padding:120px 56px;background:linear-gradient(160deg,#080600,var(--bg),#080600);position:relative;overflow:hidden;text-align:center;}
+.final-cta::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 50% 60%,rgba(184,150,62,.09) 0%,transparent 55%);}
+.final-inner{max-width:860px;margin:0 auto;position:relative;z-index:1;}
+.final-pre{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:4px;color:var(--g);text-transform:uppercase;margin-bottom:20px;display:block;}
+.final-h{font-family:'Bebas Neue',sans-serif;font-size:clamp(60px,9vw,120px);line-height:.85;margin-bottom:24px;}
+.final-h em{color:var(--g);font-style:italic;display:block;}
+.final-sub{font-size:16px;color:var(--t2);line-height:1.85;margin-bottom:52px;}
+.final-btns{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;}
+footer{background:var(--s1);border-top:1px solid var(--bd);padding:44px 56px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px;}
+.fl{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;}
+.fl b{color:var(--g);}
+.flinks{display:flex;gap:28px;list-style:none;}
+.flinks a{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:2px;color:var(--t3);text-decoration:none;text-transform:uppercase;transition:color .2s;}
+.flinks a:hover{color:var(--g);}
+.fc{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:1px;color:var(--t3);text-transform:uppercase;}
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.rv.on{opacity:1;transform:none;}
+.rv.d1{transition-delay:.1s}.rv.d2{transition-delay:.2s}.rv.d3{transition-delay:.3s}
+@media(max-width:768px){nav{padding:14px 22px;}.nlinks{display:none;}.hero{padding:0 22px 64px;}.h-stats{display:none;}.about-inner,.ai-inner{grid-template-columns:1fr;}.testi-grid{grid-template-columns:1fr;}.tc.wide{grid-column:span 1;}.svc-layout{grid-template-columns:1fr;}.svc-idx{display:none;}.svc-price-box{border-left:none;border-top:1px solid var(--bd);}section{padding-left:22px !important;padding-right:22px !important;}}
+</style>
+</head>
+<body>
+<div id="cur"></div><div id="cur2"></div>
+
+<nav>
+  <div class="nlogo">IFX<b>CARTEL</b></div>
+  <ul class="nlinks">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#experience">1-on-1</a></li>
+    <li><a href="#ai-tool">AI Tool</a></li>
+    <li><a href="#trust">Trust</a></li>
+    <li><a href="#trust">Trust</a></li>
+    <li><a href="#results">Results</a></li>
+  </ul>
+  <a href="#services" class="ncta">Get In →</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div><div class="hgrid"></div>
+  <div class="ticker-wrap"><div class="ticker-inner">
+    <div class="tick-item">NQ <span class="tick-up">▲ +0.91%</span></div>
+    <div class="tick-item">ES <span class="tick-up">▲ +0.63%</span></div>
+    <div class="tick-item">YM <span class="tick-dn">▼ -0.08%</span></div>
+    <div class="tick-item">RTY <span class="tick-up">▲ +1.14%</span></div>
+    <div class="tick-item">GC <span class="tick-up">▲ +0.42%</span></div>
+    <div class="tick-item">DXY <span class="tick-dn">▼ -0.29%</span></div>
+    <div class="tick-item">BTC <span class="tick-up">▲ +2.38%</span></div>
+    <div class="tick-item">CL <span class="tick-dn">▼ -0.61%</span></div>
+    <div class="tick-item">NQ <span class="tick-up">▲ +0.91%</span></div>
+    <div class="tick-item">ES <span class="tick-up">▲ +0.63%</span></div>
+    <div class="tick-item">YM <span class="tick-dn">▼ -0.08%</span></div>
+    <div class="tick-item">RTY <span class="tick-up">▲ +1.14%</span></div>
+    <div class="tick-item">GC <span class="tick-up">▲ +0.42%</span></div>
+    <div class="tick-item">DXY <span class="tick-dn">▼ -0.29%</span></div>
+    <div class="tick-item">BTC <span class="tick-up">▲ +2.38%</span></div>
+    <div class="tick-item">CL <span class="tick-dn">▼ -0.61%</span></div>
+  </div></div>
+  <div class="h-badge"><div class="h-dot"></div> Live · Full-Time Trader · IFX Cartel · <span>@puprime_official Partner</span></div>
+  <div class="h-name"><span class="solid">KEO</span><span class="stroke">MAZZ</span><br><span class="gold">Trades.</span></div>
+  <p class="h-desc"><strong>22 years old. Full-time trader. Educator.</strong><br>I'm Ethan Chiavassa — I built a trading method from scratch, made real money with it, and now I teach it. <strong>IFX Cartel</strong> — Inversion Flow Execution. Liquidity, structure, and precision. Any market. Any high-volume session.</p>
+  <div class="h-btns">
+    <a href="#services" class="btn-g">Choose Your Access →</a>
+    <a href="https://instagram.com/keomazz" class="btn-o" target="_blank">@keomazz</a>
+  </div>
+  <div class="h-stats">
+    <div><div class="hs-n">1K+</div><div class="hs-l">IG Followers</div></div>
+    <div><div class="hs-n">22</div><div class="hs-l">Years · Full Time</div></div>
+    <div><div class="hs-n">IFX</div><div class="hs-l">The Method</div></div>
+  </div>
+  <div class="h-scroll"><div class="h-scroll-line"></div><div class="h-scroll-txt">Scroll</div></div>
+</section>
+
+<section class="about-strip">
+  <div class="about-inner">
+    <div class="rv">
+      <div class="a-tag">Who I Am</div>
+      <div class="a-title">I don't sell<br><em>dreams.</em><br>I sell IFX.</div>
+      <p class="a-text">I'm 22 and I trade full-time. I started like everyone else — making mistakes, losing money, burning through strategies that didn't work. Then I built my own framework: <strong>IFX Cartel — Inversion Flow Execution.</strong> Liquidity, market structure, and precision entries across every high-volume session.</p>
+      <p class="a-text" style="margin-top:14px">Everything changed. I built <strong>IFX Cartel</strong> — a method that reads liquidity, respects market structure, and executes with precision. London open. NY open. NY afternoon. Gold, NQ, ES — any liquid market, same edge. I've educated hundreds of people to do the same — and the results speak for themselves.</p>
+    </div>
+    <div class="a-cards rv d2">
+      <div class="a-card"><div class="a-card-n">IFX</div><div class="a-card-t">Inversion Flow Execution — the Cartel method</div></div>
+      <div class="a-card"><div class="a-card-n">4+</div><div class="a-card-t">Markets — NQ, ES, Gold, and more. Same edge everywhere</div></div>
+      <div class="a-card"><div class="a-card-n">3:1+</div><div class="a-card-t">Minimum risk-to-reward target on every setup</div></div>
+      <div class="a-card"><div class="a-card-n">800+</div><div class="a-card-t">Students & mentees educated through IFX Cartel</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="mq"><div class="mq-t">
+  <div class="mq-i">The Window Program</div><div class="mq-i">The Private Circle</div>
+  <div class="mq-i">1-on-1 Mentorship</div><div class="mq-i">Session Specialist</div>
+  <div class="mq-i">IFX Cartel</div><div class="mq-i">Keomazz</div>
+  <div class="mq-i">The Window Program</div><div class="mq-i">The Private Circle</div>
+  <div class="mq-i">1-on-1 Mentorship</div><div class="mq-i">The Cartel WhatsApp</div>
+  <div class="mq-i">London · NY Sessions</div><div class="mq-i">IFX Cartel</div>
+  <div class="mq-i">IFX Cartel</div><div class="mq-i">Keomazz</div>
+  <div class="mq-i">The Window Program</div><div class="mq-i">The Private Circle</div>
+  <div class="mq-i">1-on-1 Mentorship</div><div class="mq-i">The Cartel WhatsApp</div>
+  <div class="mq-i">London · NY Sessions</div><div class="mq-i">IFX Cartel</div>
+</div></div>
+
+<section class="services" id="services">
+  <div class="services-wrap">
+    <div class="sec-hd rv">
+      <div class="sec-tag">My Services</div>
+      <div class="sec-h">Choose your<br><em>access level</em></div>
+    </div>
+    <div class="svc-grid">
+
+```
+  <div class="svc rv">
+    <div class="svc-layout">
+      <div class="svc-idx">01</div>
+      <div class="svc-body">
+        <div class="svc-kicker">Most Exclusive · Limited Spots</div>
+        <div class="svc-name">1-on-1 Mentorship<br>with Ethan</div>
+        <p class="svc-desc">This is not a course. This is not a one-hour call where I explain something and disappear.<br><br>
+        This is <strong>me, with you, every single day, for weeks.</strong> I watch you do your pre-market. I see you analyze the charts. I correct every execution mistake, every deviation from the strategy, every bad decision you're making without realizing it — in real time.<br><br>
+        We trade <strong>side by side</strong> — same window, same method, same process. I'm there when the market opens. I'm there when you execute. I'm there when the trade closes and we write the journal together.<br><br>
+        I've done this with a handful of selected people and the results have been brutal in the best way. <strong>I don't accept everyone</strong> — I need to understand your level, your situation, and your goals before I say yes.</p>
+        <div class="svc-pills">
+          <span class="pill">Daily Sessions Together</span><span class="pill">Live Chart Reviews</span>
+          <span class="pill">Real-Time Trade Feedback</span><span class="pill">Journal Analysis</span>
+          <span class="pill">Execution Correction</span><span class="pill">Direct Access 24/7</span>
+          <span class="pill">Custom Roadmap</span><span class="pill">No Fixed End Date</span>
+        </div>
+      </div>
+      <div class="svc-price-box">
+        <span class="svc-was">$2,500</span>
+        <span class="svc-save">SAVE $700</span>
+        <span class="svc-price">$1,800</span>
+        <span class="svc-period">One-Time · Limited Spots</span>
+        <a href="https://instagram.com/keomazz" class="svc-btn" target="_blank">Apply Now →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="svc hot rv d1">
+    <div class="hot-badge">⚡ Most Popular</div>
+    <div class="svc-layout">
+      <div class="svc-idx">02</div>
+      <div class="svc-body">
+        <div class="svc-kicker">The Complete System · Self-Paced</div>
+        <div class="svc-name">The Window<br>Program</div>
+        <p class="svc-desc">Everything I use every single morning to make money from the markets — packaged into a structured program that takes you from zero to executing with surgical precision.<br><br>
+        I don't teach generic analysis. I teach you the <strong>IFX method</strong> — how to read liquidity, how to follow market structure, and how to execute with precision across every high-volume session.<br><br>
+        The framework is simple: do The Read before 9 AM, wait for The Flush, enter when the Full Stack is aligned, close the charts by 10:30 AM. <strong>One trade. One window. Every day.</strong><br><br>
+        10 deep chapters. Built from scratch. From raw market mechanics to live execution. Real scenarios. The exact checklists I use. Lifetime access — including every future update.</p>
+        <div class="svc-pills">
+          <span class="pill">10 In-Depth Chapters</span><span class="pill">IFX Method Deep Dive</span>
+          <span class="pill">The Flush · Full Stack · Split Signal</span><span class="pill">Real Trade Scenarios</span>
+          <span class="pill">Daily Execution Checklist</span><span class="pill">Full Glossary</span>
+          <span class="pill">Lifetime Access</span><span class="pill">All Future Updates</span>
+        </div>
+      </div>
+      <div class="svc-price-box">
+        <span class="svc-was">$899</span>
+        <span class="svc-save">SAVE $601</span>
+        <span class="svc-price">$298</span>
+        <span class="svc-period">One-Time · Lifetime</span>
+        <a href="https://instagram.com/keomazz" class="svc-btn" target="_blank">Get Access →</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="svc rv d2">
+    <div class="svc-layout">
+      <div class="svc-idx">03</div>
+      <div class="svc-body">
+        <div class="svc-kicker">Community · Live Access</div>
+        <div class="svc-name">The Private<br>Circle</div>
+        <p class="svc-desc">Every trading day I wake up, go through my process, and <strong>share everything with you in real time.</strong><br><br>
+        Complete trade alerts before the market opens — precise entry, stop-loss, take-profit, and above all <em>the full reasoning behind every single decision.</em> I don't just send you the signal. I explain exactly why that is the right move at that exact moment.<br><br>
+        Daily analysis across London and NY sessions. Gold, NQ, ES — full breakdowns. Ongoing education. A community of serious traders building something real — not gamblers chasing random moves.<br><br>
+        <strong>Two options: monthly to test us out, lifetime if you're already convinced.</strong> Most people who come monthly don't leave.</p>
+        <div class="svc-pills">
+          <span class="pill">Live Trade Alerts</span><span class="pill">Full Entry + SL + TP</span>
+          <span class="pill">Reasoned Breakdown</span><span class="pill">Pre-Market Analysis</span>
+          <span class="pill">Post-Trade Review</span><span class="pill">Private Community</span>
+          <span class="pill">Educational Content</span><span class="pill">Immediate Access</span>
+        </div>
+      </div>
+      <div class="svc-price-box">
+        <div class="svc-alt-price">
+          <div class="alt-row"><span class="alt-label">Monthly</span><span class="alt-val">$75</span></div>
+          <div class="alt-row" style="flex-direction:column;align-items:flex-start;gap:2px;">
+            <span class="alt-label">Lifetime</span>
+            <div style="display:flex;align-items:baseline;gap:8px;">
+              <span style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--t3);text-decoration:line-through;letter-spacing:1px;">$1,800</span>
+              <span class="alt-val">$1,200</span>
+            </div>
+            <span style="background:var(--r);color:#fff;font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:1px;padding:2px 7px;margin-top:2px;">SAVE $600</span>
+          </div>
+        </div>
+        <a href="https://instagram.com/keomazz" class="svc-btn" style="margin-top:16px" target="_blank">Join Now →</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- THE CARTEL WHATSAPP -->
+  <div class="svc rv d3" style="border-color:rgba(201,168,76,.2);background:linear-gradient(135deg,#0C0C08,#0F0F0A);">
+    <div class="hot-badge" style="background:transparent;border:1px solid var(--g);color:var(--g);">⚡ NEW</div>
+    <div class="svc-layout">
+      <div class="svc-idx" style="color:rgba(201,168,76,.3);">04</div>
+      <div class="svc-body">
+        <div class="svc-kicker">Private WhatsApp Group · 100 Spots Only</div>
+        <div class="svc-name">The Cartel<br>WhatsApp</div>
+        <p class="svc-desc">
+          This is the closest you can get to being inside my head — without the 1-on-1.<br><br>
+          Every day before the London and NY sessions open, I drop my <strong>full market read directly into the group.</strong> The bias. The levels I'm watching. The setup I'm waiting for. Exactly what I see — in real time, before it happens.<br><br>
+          After every session I close out with a <strong>full breakdown of what played out</strong> — what the market did, why it did it, and what the IFX method spotted. You don't just see the result. You understand the reason.<br><br>
+          On top of that: <strong>weekly educational drops</strong> — IFX concepts, how to read liquidity, how to identify sessions, how to build your own process. Everything that makes the method work, broken down piece by piece.<br><br>
+          <strong>100 spots. One-time payment. Lifetime access.</strong> Once it's full — it's closed. No exceptions, no waitlist.
+        </p>
+        <div class="svc-pills">
+          <span class="pill">Pre-Session Market Read</span>
+          <span class="pill">London + NY Analysis</span>
+          <span class="pill">Post-Session Breakdown</span>
+          <span class="pill">NQ · ES · Gold · More</span>
+          <span class="pill">Weekly IFX Education</span>
+          <span class="pill">100 Members Max</span>
+          <span class="pill">Lifetime Access</span>
+          <span class="pill">Direct Group Access</span>
+        </div>
+      </div>
+      <div class="svc-price-box">
+        <span class="svc-was">$299</span>
+        <span class="svc-save">SAVE $174</span>
+        <span class="svc-price">$125</span>
+        <span class="svc-period">One-Time · Lifetime · 100 Spots</span>
+        <a href="https://instagram.com/keomazz" class="svc-btn" target="_blank">Join The Cartel →</a>
+        <div style="margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--t3);text-align:center;letter-spacing:1px;line-height:1.6;">
+          DM @keomazz on IG after<br>payment to get added
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+```
+
+  </div>
+</section>
+
+<section class="exp-section" id="experience">
+  <div class="exp-inner">
+    <div style="padding-top:80px" class="rv">
+      <div class="sec-tag">How the 1-on-1 Works</div>
+      <div class="sec-h" style="margin-bottom:0">Week by week.<br><em>With you.</em></div>
+    </div>
+    <div class="exp-timeline">
+      <div class="exp-item rv">
+        <div class="exp-dot">W1</div>
+        <div class="exp-content">
+          <div class="exp-phase">Week 1 — Foundation</div>
+          <div class="exp-title">I break you down and rebuild from scratch</div>
+          <p class="exp-text">First thing: I need to understand where you are right now. I look at your past trades, your process, your mistakes. <strong>We identify everything that's costing you money</strong> — and eliminate it before building anything new. Then we start installing the correct framework, piece by piece.</p>
+        </div>
+      </div>
+      <div class="exp-item rv d1">
+        <div class="exp-dot">W2</div>
+        <div class="exp-content">
+          <div class="exp-phase">Week 2 — The System</div>
+          <div class="exp-title">You learn to read the market the way I read it</div>
+          <p class="exp-text">Every morning we do The Read together. I show you exactly how I analyze HTF charts, how I identify The Current, how I mark key levels. <strong>You're on my screen, in real time.</strong> You stop looking at patterns — you start reading institutional intent.</p>
+        </div>
+      </div>
+      <div class="exp-item rv d2">
+        <div class="exp-dot">W3</div>
+        <div class="exp-content">
+          <div class="exp-phase">Week 3 — Live Execution</div>
+          <div class="exp-title">You enter the market with me watching</div>
+          <p class="exp-text">Now you execute. I'm right there — I see every click, every thought process, every hesitation. When you're wrong I stop you and explain why. When you're right I confirm it. <strong>There's no other way to learn execution under pressure</strong> than to actually do it with someone who's already walked that road.</p>
+        </div>
+      </div>
+      <div class="exp-item rv d3">
+        <div class="exp-dot">∞</div>
+        <div class="exp-content">
+          <div class="exp-phase">Ongoing — Until You're Independent</div>
+          <div class="exp-title">I don't let go until you're fully autonomous</div>
+          <p class="exp-text">There's no arbitrary end date. We work together <strong>until you can run the system alone with full confidence.</strong> Weekly journaling. Constant feedback. If a week went badly, we analyze it together — we don't let it slide. That's the real value of a 1-on-1.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="mq2 mq"><div class="mq-t">
+  <div class="mq-i">The Flush</div><div class="mq-i">Full Stack</div>
+  <div class="mq-i">The Current</div><div class="mq-i">Magnetic Target</div>
+  <div class="mq-i">Dead Water</div><div class="mq-i">Split Signal</div>
+  <div class="mq-i">The Read</div><div class="mq-i">Foundation Range</div>
+  <div class="mq-i">The Flush</div><div class="mq-i">Full Stack</div>
+  <div class="mq-i">The Current</div><div class="mq-i">Magnetic Target</div>
+  <div class="mq-i">Dead Water</div><div class="mq-i">Split Signal</div>
+  <div class="mq-i">The Read</div><div class="mq-i">Foundation Range</div>
+</div></div>
+
+<section class="ai-sec" id="ai-tool">
+  <div class="ai-inner">
+    <div class="rv">
+      <div class="sec-tag" style="margin-bottom:16px">AI-Powered · Free Tool</div>
+      <div class="ai-terminal">
+        <div class="ai-bar">
+          <div class="ai-dot-r"></div><div class="ai-dot-y"></div><div class="ai-dot-g"></div>
+          <span class="ai-bar-t">// MARKET BIAS ANALYZER — IFX CARTEL</span>
+        </div>
+        <div class="ai-body">
+          <div class="ai-lbl">Select Instrument</div>
+          <select class="ai-sel" id="aiInst">
+            <option value="NQ">NQ — NASDAQ 100 Futures</option>
+            <option value="GC">GC — Gold Futures</option>
+            <option value="ES">ES — S&P 500 Futures</option>
+            <option value="EURUSD">EURUSD — Euro / US Dollar</option>
+            <option value="GBP">GBPUSD — British Pound</option>
+            <option value="YM">YM — Dow Jones Futures</option>
+            <option value="RTY">RTY — Russell 2000 Futures</option>
+          </select>
+          <div class="ai-lbl">Describe the Current Market Setup</div>
+          <textarea class="ai-inp" id="aiTxt" rows="4" placeholder="e.g. Daily is bullish making higher highs. London created a sharp move down below the Asia low. PDL at 19,840. Previous week high at 20,250 above..."></textarea>
+          <button class="ai-run" id="aiRun" onclick="runAI()">
+            <div class="spin" id="spin"></div>
+            <span id="aiRunTxt">Analyze Setup →</span>
+          </button>
+          <div class="ai-out" id="aiOut">
+            <div class="ai-out-hd">Analysis Ready · IFX Cartel</div>
+            <div class="ai-out-bd" id="aiOutBd"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="rv d2">
+      <div class="sec-tag" style="margin-bottom:16px">Built Into The System</div>
+      <div class="ai-r-title">Instant bias.<br><em>Based on the method.</em></div>
+      <p class="ai-r-sub">Describe your setup and get a real-time IFX Cartel analysis — The Current, key levels, the most likely Flush scenario, and the Magnetic Target across any session.</p>
+      <div class="ai-feats">
+        <div class="ai-feat"><div class="ai-feat-ico">📊</div><div><div class="ai-feat-t">HTF Bias Reading</div><div class="ai-feat-d">Determine The Current instantly from your description</div></div></div>
+        <div class="ai-feat"><div class="ai-feat-ico">🎯</div><div><div class="ai-feat-t">Magnetic Target ID</div><div class="ai-feat-d">Identify the most likely draw on liquidity for the session</div></div></div>
+        <div class="ai-feat"><div class="ai-feat-ico">⚡</div><div><div class="ai-feat-t">Flush Probability</div><div class="ai-feat-d">London open · NY open · NY afternoon — any session</div></div></div>
+        <div class="ai-feat"><div class="ai-feat-ico">🔍</div><div><div class="ai-feat-t">Level Identification</div><div class="ai-feat-d">Key liquidity levels across NQ, ES, Gold, Forex pairs</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST SECTION -->
+
+<section id="trust" style="padding:80px 56px;background:var(--bg);position:relative;z-index:1;">
+  <div style="max-width:1120px;margin:0 auto;">
+    <div class="sec-hd rv" style="margin-bottom:48px;">
+      <div class="sec-tag">Why Trust Me</div>
+      <div class="sec-h">Real person.<br><em>Real trades.</em></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:3px;" class="rv">
+
+```
+  <div style="background:var(--s1);border:1px solid var(--bd);padding:32px;border-radius:0;transition:border-color .3s;" onmouseover="this.style.borderColor='rgba(201,168,76,.3)'" onmouseout="this.style.borderColor='var(--bd)'">
+    <div style="font-size:28px;margin-bottom:16px;">📱</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:10px;">I Post Every Day</div>
+    <p style="font-size:14px;color:var(--t2);line-height:1.8;">Every analysis I share here, I post on Instagram first. You can watch the London and NY sessions play out in real time on my stories before you spend a single dollar. Go check <strong style="color:var(--t)">@keomazz</strong> right now — it's all there.</p>
+  </div>
+
+  <div style="background:var(--s1);border:1px solid var(--bd);padding:32px;transition:border-color .3s;" onmouseover="this.style.borderColor='rgba(201,168,76,.3)'" onmouseout="this.style.borderColor='var(--bd)'">
+    <div style="font-size:28px;margin-bottom:16px;">🎯</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:10px;">I Trade What I Teach</div>
+    <p style="font-size:14px;color:var(--t2);line-height:1.8;">I'm not a coach who stopped trading to sell courses. I execute the <strong style="color:var(--t)">IFX method</strong> every session — London, NY, Gold, NQ. The analysis I send isn't theory. It's my live read of the market, every single day.</p>
+  </div>
+
+  <div style="background:var(--s1);border:1px solid var(--bd);padding:32px;transition:border-color .3s;" onmouseover="this.style.borderColor='rgba(201,168,76,.3)'" onmouseout="this.style.borderColor='var(--bd)'">
+    <div style="font-size:28px;margin-bottom:16px;">👥</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:10px;">800+ Students</div>
+    <p style="font-size:14px;color:var(--t2);line-height:1.8;">Over 800 people have gone through IFX Cartel education. Prop firm passes, first profitable months, account growth — the results are documented. Check the testimonials below. These are real people with real outcomes.</p>
+  </div>
+
+  <div style="background:var(--s1);border:1px solid var(--bd);padding:32px;transition:border-color .3s;" onmouseover="this.style.borderColor='rgba(201,168,76,.3)'" onmouseout="this.style.borderColor='var(--bd)'">
+    <div style="font-size:28px;margin-bottom:16px;">🔒</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:10px;">No Guarantees. Just Reality.</div>
+    <p style="font-size:14px;color:var(--t2);line-height:1.8;">I won't promise you'll make millions. Trading takes time, discipline, and real work. What I <strong style="color:var(--t)">will</strong> give you is the exact method I use — nothing hidden, nothing held back. What you do with it is on you.</p>
+  </div>
+
+  <div style="background:var(--s1);border:1px solid var(--bd);padding:32px;transition:border-color .3s;" onmouseover="this.style.borderColor='rgba(201,168,76,.3)'" onmouseout="this.style.borderColor='var(--bd)'">
+    <div style="font-size:28px;margin-bottom:16px;">💳</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:10px;">Secure Payments</div>
+    <p style="font-size:14px;color:var(--t2);line-height:1.8;">All payments processed through <strong style="color:var(--t)">Stripe</strong> — the most trusted payment platform in the world. Your card details never touch my servers. Bank-level encryption on every transaction.</p>
+  </div>
+
+  <div style="background:var(--s1);border:1px solid rgba(201,168,76,.2);padding:32px;background:linear-gradient(135deg,#0C0C08,#0F0F0A);transition:border-color .3s;" onmouseover="this.style.borderColor='rgba(201,168,76,.5)'" onmouseout="this.style.borderColor='rgba(201,168,76,.2)'">
+    <div style="font-size:28px;margin-bottom:16px;">✉️</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;margin-bottom:10px;color:var(--g)">Still Not Sure?</div>
+    <p style="font-size:14px;color:var(--t2);line-height:1.8;">DM me on Instagram before buying anything. I'll answer every question honestly — even if the answer is that my products aren't right for you right now. No pressure. No hard sell.</p>
+    <a href="https://instagram.com/keomazz" target="_blank" style="display:inline-flex;align-items:center;gap:8px;margin-top:14px;background:var(--g);color:#000;font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:10px 20px;text-decoration:none;transition:background .2s;">DM @keomazz →</a>
+  </div>
+
+</div>
+```
+
+  </div>
+</section>
+
+<section class="testi" id="results">
+  <div class="testi-wrap">
+    <div class="sec-hd rv">
+      <div class="sec-tag">Real Results</div>
+      <div class="sec-h">What they say<br><em>about IFX Cartel</em></div>
+    </div>
+    <div class="testi-grid">
+      <div class="tc wide rv">
+        <div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div>
+        <div class="tc-result">+$3,200 Month 1</div>
+        <div class="tc-q">"</div>
+        <p class="tc-txt">I spent two years on YouTube, bought three courses, blew two demo accounts. In six weeks of 1-on-1 with Ethan I understood more about how markets work than in all of that combined. <strong>The concept of The Flush completely rewired how I see charts</strong> — I literally can't unsee it anymore. First profitable month: +$3,200. For the first time I feel like I have a real system.</p>
+        <hr class="tc-sep">
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,var(--g),#6b4a1a)">A</div><div><div class="tc-nm">Alessandro R.</div><div class="tc-hd">@alex.trades · 1-on-1 Mentorship</div></div></div>
+      </div>
+      <div class="tc rv d1">
+        <div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div>
+        <div class="tc-result">Prop Firm Passed</div>
+        <div class="tc-q">"</div>
+        <p class="tc-txt">Passed my first prop firm challenge in 3 weeks using exactly what Keomazz teaches. <strong>The Full Stack checklist is the first thing I open before every trade.</strong> Didn't think discipline could feel this natural.</p>
+        <hr class="tc-sep">
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,#4A9EFF,#1a3a6b)">L</div><div><div class="tc-nm">Luca M.</div><div class="tc-hd">@lucam.fx · The Window Program</div></div></div>
+      </div>
+      <div class="tc rv">
+        <div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div>
+        <div class="tc-result">6 Months Consistent</div>
+        <div class="tc-q">"</div>
+        <p class="tc-txt">Six months in The Private Circle. <strong>The trade alerts with the full breakdown are a completely different level</strong> — you don't just see the trade, you understand the why. Best investment I've made in trading. Not even close.</p>
+        <hr class="tc-sep">
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,var(--gr),#1a6b3a)">F</div><div><div class="tc-nm">Federico B.</div><div class="tc-hd">@fed.trading · The Private Circle</div></div></div>
+      </div>
+      <div class="tc rv d1">
+        <div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div>
+        <div class="tc-result">+340% Account</div>
+        <div class="tc-q">"</div>
+        <p class="tc-txt">From $2K to $9K in four months. The key was The Window — <strong>I stopped trading all day and started trading one session.</strong> Keomazz's system is the most real thing I've found in this space.</p>
+        <hr class="tc-sep">
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,var(--r),#6b1a1a)">D</div><div><div class="tc-nm">Davide T.</div><div class="tc-hd">@dav.nq · The Window Program</div></div></div>
+      </div>
+      <div class="tc rv d2">
+        <div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div>
+        <div class="tc-result">$50K Funded</div>
+        <div class="tc-q">"</div>
+        <p class="tc-txt">The way Ethan explains the IFX method is different — <strong>zero fluff, zero unnecessary complexity.</strong> Just what you need and exactly how to apply it. Worth every cent of the $298, multiplied by ten.</p>
+        <hr class="tc-sep">
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,#9B59B6,#4a1a6b)">M</div><div><div class="tc-nm">Marco V.</div><div class="tc-hd">@marcov.trade · The Window Program</div></div></div>
+      </div>
+      <div class="tc wide rv">
+        <div class="tc-stars"><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span><span class="tc-star">★</span></div>
+        <div class="tc-result">1-on-1 Alumni</div>
+        <div class="tc-q">"</div>
+        <p class="tc-txt">I was skeptical — I've been burned by "trading gurus" before. <strong>Ethan is different because he actually trades, every morning, and you can see it.</strong> The 1-on-1 was the most intense thing I've done in years of trading. You're not buying a course — you're buying years of experience compressed into weeks. That has no price.</p>
+        <hr class="tc-sep">
+        <div class="tc-auth"><div class="tc-av" style="background:linear-gradient(135deg,#E67E22,#6b3a1a)">G</div><div><div class="tc-nm">Giacomo S.</div><div class="tc-hd">@gia.markets · 1-on-1 Mentorship</div></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ig-cta" id="contact">
+  <div class="ig-inner rv">
+    <div class="sec-tag" style="justify-content:center;margin-bottom:12px">Follow Along</div>
+    <div class="ig-handle">@keomazz</div>
+    <p class="ig-sub">Daily market analysis. Real-time trades. The full process — every morning, live. Daily analysis across London and NY sessions. Gold, NQ, ES — live. Follow to see the IFX method in action every day.</p>
+    <a href="https://instagram.com/keomazz" class="ig-link" target="_blank"><span>📱</span><span>Follow on Instagram</span></a>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="final-inner rv">
+    <span class="final-pre">London. NY. Every high-volume session.</span>
+    <div class="final-h">Ready<br><em>or not?</em></div>
+    <p class="final-sub">London opens at 3 AM. New York opens at 9:30 AM. Gold moves every session. The question is whether you'll have the right method when they do — and whether you'll be ready to execute it.</p>
+    <div class="final-btns">
+      <a href="#services" class="btn-g">Choose Your Access →</a>
+      <a href="https://instagram.com/keomazz" class="btn-o" target="_blank">DM on Instagram</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="fl">IFX<b>CARTEL</b><span style="font-family:'JetBrains Mono',monospace;font-size:9px;display:block;letter-spacing:2px;color:var(--t3);margin-top:2px;">BY KEOMAZZ</span></div>
+  <ul class="flinks">
+    <li><a href="#services">Services</a></li>
+    <li><a href="#experience">1-on-1</a></li>
+    <li><a href="#ai-tool">AI Tool</a></li>
+    <li><a href="#trust">Trust</a></li>
+    <li><a href="#trust">Trust</a></li>
+    <li><a href="#results">Results</a></li>
+    <li><a href="https://instagram.com/keomazz" target="_blank">Instagram</a></li>
+  </ul>
+  <div class="fc">© 2025 Ethan Chiavassa · Keomazz · IFX Cartel · All Rights Reserved</div>
+</footer>
+
+<script>
+const c=document.getElementById('cur'),r=document.getElementById('cur2');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;c.style.left=mx+'px';c.style.top=my+'px';});
+setInterval(()=>{rx+=(mx-rx)*.12;ry+=(my-ry)*.12;r.style.left=rx+'px';r.style.top=ry+'px';},16);
+document.querySelectorAll('a,button,select,textarea').forEach(el=>{
+  el.addEventListener('mouseenter',()=>{c.style.width='18px';c.style.height='18px';r.style.width='52px';r.style.height='52px';});
+  el.addEventListener('mouseleave',()=>{c.style.width='8px';c.style.height='8px';r.style.width='32px';r.style.height='32px';});
+});
+const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('on');obs.unobserve(e.target);}});},{threshold:0.08});
+document.querySelectorAll('.rv').forEach(el=>obs.observe(el));
+async function runAI(){
+  const inst=document.getElementById('aiInst').value;
+  const txt=document.getElementById('aiTxt').value.trim();
+  const btn=document.getElementById('aiRun');
+  const btnTxt=document.getElementById('aiRunTxt');
+  const spin=document.getElementById('spin');
+  const out=document.getElementById('aiOut');
+  const bd=document.getElementById('aiOutBd');
+  if(!txt){bd.innerHTML='<span style="color:var(--r)">Please describe the market setup first.</span>';out.classList.add('show');return;}
+  btn.disabled=true;btnTxt.style.display='none';spin.style.display='block';out.classList.remove('show');
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:`You are an elite trading analyst using the IFX Cartel method by Keomazz. IFX = Inversion Flow Execution. Terminology: "The Current"=HTF bias, "The Flush"=liquidity sweep, "The Magnetic Target"=draw on liquidity, "The Full Stack"=all conditions aligned, "Dead Water"=no setup, "Foundation Range"=session range, "Split Signal"=divergence between correlated instruments, "Clean Flush"=Full Stack+Split Signal. Works on all sessions: London open, NY open, NY afternoon. Works on all markets: NQ, ES, Gold, Forex pairs, indices. Analyze the setup and provide: 1)The Current 2)Key levels 3)Most likely Flush scenario 4)Magnetic Target 5)Session context (London/NY) 6)Rating: Clean Flush/Full Stack/Partial/Dead Water. Be sharp, concise, professional. Respond in English.`,messages:[{role:'user',content:`Instrument: ${inst}\nSetup: ${txt}\nAnalyze using the Keomazz system.`}]})});
+    const data=await res.json();
+    const text=data.content?.[0]?.text||'Analysis unavailable.';
+    let f=text.replace(/\bBullish\b/g,'<span class="bull">BULLISH</span>').replace(/\bBearish\b/g,'<span class="bear">BEARISH</span>').replace(/Dead Water/g,'<span style="color:#555">DEAD WATER</span>').replace(/Clean Flush/g,'<span style="color:var(--g);font-weight:700">CLEAN FLUSH ✦</span>').replace(/Full Stack/g,'<span style="color:var(--g)">FULL STACK</span>').replace(/→/g,'<br><span style="color:var(--g)">→</span> ').replace(/\n/g,'<br>');
+    bd.innerHTML=f;out.classList.add('show');
+  }catch(e){bd.innerHTML='<span style="color:var(--r)">Connection error. Please try again.</span>';out.classList.add('show');}
+  btn.disabled=false;btnTxt.style.display='block';spin.style.display='none';
+}
+document.getElementById('aiTxt').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();runAI();}});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}});});
+</script>
+
+<!-- ══════════════ IFX CARTEL INTRO OVERLAY ══════════════ -->
+
+<style>
+#intro-overlay{
+  position:fixed;inset:0;z-index:9999;
+  background:#050505;
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;
+  flex-direction:column;gap:20px;
+}
+#intro-overlay.fade-out{animation:overlayFade 0.8s forwards;}
+@keyframes overlayFade{to{opacity:0;pointer-events:none;}}
+
+.intro-box{
+  width:100%;max-width:520px;
+  background:#0C0C0C;
+  border:1px solid #222;
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 32px 80px rgba(0,0,0,0.8);
+}
+.intro-header{
+  background:#111;
+  border-bottom:1px solid #1a1a1a;
+  padding:16px 20px;
+  display:flex;align-items:center;gap:12px;
+}
+.intro-avatar{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,#C9A84C,#8B5E1A);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;color:#000;
+  flex-shrink:0;
+}
+.intro-name{font-weight:600;font-size:14px;color:#F0F0F0;}
+.intro-status{
+  display:flex;align-items:center;gap:5px;
+  font-family:'JetBrains Mono',monospace;font-size:10px;color:#555;letter-spacing:1px;
+  margin-top:2px;
+}
+.intro-status-dot{
+  width:6px;height:6px;border-radius:50%;background:#27AE60;
+  animation:pulse2 2s infinite;
+}
+@keyframes pulse2{0%,100%{box-shadow:0 0 0 0 rgba(39,174,96,.4)}50%{box-shadow:0 0 0 5px rgba(39,174,96,0)}}
+
+.intro-messages{
+  padding:20px 20px 8px;
+  display:flex;flex-direction:column;gap:12px;
+  max-height:340px;overflow-y:auto;
+}
+.intro-messages::-webkit-scrollbar{width:3px;}
+.intro-messages::-webkit-scrollbar-thumb{background:#222;border-radius:2px;}
+
+.intro-bubble{
+  max-width:86%;
+  background:#181818;border:1px solid #222;
+  padding:12px 16px;border-radius:12px;border-bottom-left-radius:3px;
+  font-size:14px;color:#BBBBBB;line-height:1.65;
+  opacity:0;transform:translateY(8px);
+  transition:opacity 0.35s ease,transform 0.35s ease;
+}
+.intro-bubble.show{opacity:1;transform:translateY(0);}
+.intro-bubble.user-bubble{
+  align-self:flex-end;
+  background:rgba(201,168,76,0.08);
+  border-color:rgba(201,168,76,0.2);
+  color:#F0F0F0;
+  border-radius:12px;border-bottom-right-radius:3px;
+  max-width:80%;
+}
+.intro-bubble strong{color:#F0F0F0;}
+.intro-bubble .gold{color:#C9A84C;}
+
+.intro-typing{
+  display:flex;align-items:center;gap:5px;
+  padding:6px 4px;height:28px;
+  opacity:0;transition:opacity 0.2s;
+  flex-shrink:0;
+}
+.intro-typing.show{opacity:1;}
+.intro-typing span{
+  width:6px;height:6px;border-radius:50%;background:#444;
+  animation:typing 1.2s infinite;
+}
+.intro-typing span:nth-child(2){animation-delay:.2s;}
+.intro-typing span:nth-child(3){animation-delay:.4s;}
+@keyframes typing{0%,80%,100%{opacity:.2}40%{opacity:1}}
+
+.intro-options{
+  padding:8px 20px 16px;
+  display:flex;flex-direction:column;gap:8px;
+  opacity:0;transform:translateY(6px);
+  transition:opacity 0.35s ease,transform 0.35s ease;
+  min-height:0;
+}
+.intro-options.show{opacity:1;transform:none;}
+.intro-opt{
+  background:#111;border:1px solid #222;
+  color:#C9A84C;padding:11px 16px;border-radius:8px;
+  font-size:13px;cursor:pointer;text-align:left;
+  transition:all .2s;font-family:'DM Sans',sans-serif;
+  display:flex;align-items:center;gap:8px;
+}
+.intro-opt:hover{background:#171410;border-color:rgba(201,168,76,.4);}
+.intro-opt::before{content:'→';font-size:12px;}
+
+.intro-enter-btn{
+  margin:0 20px 20px;
+  background:var(--g);color:#000;border:none;
+  font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;
+  padding:17px;border-radius:8px;cursor:pointer;width:calc(100% - 40px);
+  transition:background .2s,transform .2s;
+  display:none;
+}
+.intro-enter-btn.show{display:block;}
+.intro-enter-btn:hover{background:var(--g2);transform:scale(1.01);}
+
+.intro-countdown{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  color:#444;letter-spacing:2px;text-align:center;
+  padding:0 20px 16px;display:none;
+  text-transform:uppercase;
+}
+.intro-countdown.show{display:block;}
+
+/* SKIP button — bottom center, prominent */
+#intro-skip-btn{
+  background:transparent;
+  border:1px solid #333;
+  color:#555;
+  font-family:'JetBrains Mono',monospace;
+  font-size:12px;letter-spacing:3px;
+  text-transform:uppercase;
+  padding:12px 32px;
+  border-radius:8px;
+  cursor:pointer;
+  transition:all .3s;
+  flex-shrink:0;
+}
+#intro-skip-btn:hover{border-color:#666;color:#999;}
+</style>
+
+<div id="intro-overlay">
+  <div class="intro-box" id="introBox">
+    <div class="intro-header">
+      <div class="intro-avatar">K</div>
+      <div>
+        <div class="intro-name">Keomazz — Ethan Chiavassa</div>
+        <div class="intro-status">
+          <div class="intro-status-dot"></div>
+          Online now
+        </div>
+      </div>
+    </div>
+    <div class="intro-messages" id="introMessages">
+      <div class="intro-typing" id="introTyping">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+    <div class="intro-options" id="introOptions"></div>
+    <button class="intro-enter-btn" id="introEnterBtn" onclick="enterSite()">
+      Enter The Site →
+    </button>
+    <div class="intro-countdown" id="introCountdown"></div>
+  </div>
+  <button id="intro-skip-btn" onclick="enterSite()">Skip →</button>
+</div>
+
+<script>
+// ══════════════ INTRO FLOW ══════════════
+const introFlow = [
+  {
+    text:`What's up. I'm <strong>Ethan</strong> — <span class="gold">Keomazz</span>.<br>Before you enter, quick question. Takes 20 seconds.`
+  },
+  {
+    text:`Where are you right now with trading?`,
+    options:["I'm a complete beginner","I trade but I'm not consistent","I know the concepts but can't execute","I'm already profitable"],
+    key:'level'
+  },
+  {
+    text:`And what's your main goal?`,
+    options:["Pass a prop firm challenge","Replace my 9-5 income","Learn the IFX Cartel method","Build a serious trading career"],
+    key:'goal'
+  },
+  {
+    text:`Last one — how serious are you about this?`,
+    options:["Extremely serious — I'm all in","Very serious — I put in the work","Still figuring it out"],
+    key:'seriousness'
+  },
+  {
+    type:'final',
+    getText:(answers)=>{
+      const l=answers.level||'';
+      let rec='';
+      if(l.includes('beginner')) rec=`<span class="gold">The Window Program</span> — built from scratch, zero to executing.`;
+      else if(l.includes('concepts')) rec=`<span class="gold">The 1-on-1</span> — you have the knowledge, you're missing execution. I fix that personally.`;
+      else if(l.includes('consistent')) rec=`<span class="gold">The Window Program</span> gives you the system. Want me next to you? The <span class="gold">1-on-1</span> is there.`;
+      else rec=`<span class="gold">The Private Circle</span> — trade alongside me every morning.`;
+      return `Based on what you told me — ${rec}<br><br><strong>Everything's inside. Let's go.</strong>`;
+    }
+  }
+];
+
+let introStep = 0;
+let introAnswers = {};
+
+// Always keep typing indicator at bottom of messages
+function getTyping(){ return document.getElementById('introTyping'); }
+function getMsgs(){ return document.getElementById('introMessages'); }
+
+function addBubble(html, isUser=false){
+  const msgs = getMsgs();
+  const typing = getTyping();
+  const b = document.createElement('div');
+  b.className = 'intro-bubble' + (isUser?' user-bubble':'');
+  b.innerHTML = html;
+  // insert BEFORE typing indicator
+  msgs.insertBefore(b, typing);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    b.classList.add('show');
+    msgs.scrollTop = msgs.scrollHeight;
+  }));
+  return b;
+}
+
+function showTyping(){
+  const t = getTyping();
+  t.classList.add('show');
+  getMsgs().scrollTop = getMsgs().scrollHeight;
+}
+function hideTyping(){ getTyping().classList.remove('show'); }
+
+function typeDelay(ms){ return new Promise(r=>setTimeout(r,ms)); }
+
+async function keoSay(html){
+  showTyping();
+  await typeDelay(850);
+  hideTyping();
+  await typeDelay(60);
+  addBubble(html, false);
+  await typeDelay(200);
+}
+
+function showOptions(options){
+  return new Promise(resolve=>{
+    const c = document.getElementById('introOptions');
+    c.innerHTML='';
+    options.forEach(opt=>{
+      const btn = document.createElement('button');
+      btn.className='intro-opt';
+      btn.textContent=opt;
+      btn.onclick=()=>{
+        // hide options immediately
+        c.classList.remove('show');
+        c.innerHTML='';
+        // show user bubble
+        addBubble(opt, true);
+        resolve(opt);
+      };
+      c.appendChild(btn);
+    });
+    requestAnimationFrame(()=>requestAnimationFrame(()=>c.classList.add('show')));
+  });
+}
+
+async function runIntro(){
+  // Message 1 — greeting
+  await typeDelay(400);
+  await keoSay(introFlow[0].text);
+
+  for(let i=1; i<introFlow.length; i++){
+    const step = introFlow[i];
+    if(step.type==='final'){
+      await keoSay(step.getText(introAnswers));
+      // Show enter button
+      const btn = document.getElementById('introEnterBtn');
+      btn.classList.add('show');
+      // Countdown auto-close
+      const cd = document.getElementById('introCountdown');
+      cd.classList.add('show');
+      let secs = 5;
+      cd.textContent = `Entering in ${secs}s...`;
+      const timer = setInterval(()=>{
+        secs--;
+        if(secs<=0){ clearInterval(timer); enterSite(); }
+        else cd.textContent = `Entering in ${secs}s...`;
+      },1000);
+      break;
+    }
+    // Regular question step
+    await keoSay(step.text);
+    const answer = await showOptions(step.options);
+    introAnswers[step.key] = answer;
+    // Small pause after user answers before next message
+    await typeDelay(300);
+  }
+}
+
+function enterSite(){
+  const overlay = document.getElementById('intro-overlay');
+  overlay.classList.add('fade-out');
+  setTimeout(()=>{ if(overlay.parentNode) overlay.remove(); }, 800);
+  sessionStorage.setItem('keo-intro-done','1');
+}
+
+if(!sessionStorage.getItem('keo-intro-done')){
+  runIntro();
+} else {
+  document.getElementById('intro-overlay').remove();
+}
+</script>
+
+</body>
+</html>
